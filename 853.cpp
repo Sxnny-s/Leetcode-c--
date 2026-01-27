@@ -1,40 +1,36 @@
-#include <cmath>
-#include <algorithm>
-#include <vector>
-#include <stack>
-using namespace std;
-
 class Solution {
 public:
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
-         // pair speeds and positions
-        vector<pair<double,double>> arr; 
-
+        
+        // pair and sort positions and speed in an vector
+        vector<pair<int,int>> arr;
         for(int i {}; i < position.size();i++){
             arr.push_back({position[i],speed[i]});
         }
 
-        sort(arr.rbegin(), arr.rend());
+        sort(arr.rbegin(),arr.rend());
 
-        // init stack 
-        stack<double> st;
-        // iterate through the speeds and positions sorted
-        for(int i {}; i < arr.size();i++){
-            // calculate the time it takes the car to reach the target
-            double time = (target - arr[i].first) / arr[i].second;
-            cout << time << '\n';
-            // while the !st.isempty()  and the top of our stack time is <= the current finishing time
-            while(!st.empty() && time <= st.top()){
-                // pop off the stack
-                time = st.top();
-                st.pop();
+        // init min_speed (hold the speed of the slowest fleet)
+        double min_speed = (double)(target - arr[0].first ) / arr[0].second;
+        // init fleets (couts number of fleets)
+        int fleets {1};
+
+        // iterate through out sorted array 
+        for(auto& [pos,spd] : arr){
+
+            // calculate the time to target
+            double time = double(target - pos) / spd;
+
+            // if time is <= min_speed
+            if(time > min_speed){
+                min_speed = time;
+                fleets++;
+                //else fleets++
+                // min speed == time
             }
-            // add the current finishing time to stack
-            st.push(time);    
         }
-        // return the stack length
-        return st.size();
-    }
-    }
 
+        // return fleets
+        return fleets;
+    }
 };
